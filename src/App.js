@@ -44,8 +44,8 @@ const App = () => {
   const postNewOrder = newOrder => {
     axios.post(`https://reqres.in/api/orders`, newOrder)
       .then(res=>{
-        setOrders([res.data.data,...orders]);
-        console.log(orders);
+        setOrders([res.data,...orders]);
+        //console.log(orders);
       })
       .catch(err=>console.error(err))
       .finally(()=>setFormValues(initialFormValues))
@@ -75,6 +75,7 @@ const App = () => {
       specialInstructions: formValues.specialInstructions.trim()
     }
     postNewOrder(newOrder);
+    console.log(orders);
   }
 
   useEffect(()=>{

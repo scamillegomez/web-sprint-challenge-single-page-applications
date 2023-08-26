@@ -6,9 +6,9 @@ export default function Confirmation(props){
     return(
         <div>
             Test
-            {orders.map(order=>{
+            {/* {orders.map(order=>{
                 <Order key={order.id} details={order}/>
-            })}
+            })} */}
         </div>
     )
 }

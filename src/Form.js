@@ -20,6 +20,7 @@ export default function PizzaForm(props){
         evt.preventDefault();
         submit();
         routeToConfirmation();
+        console.log(orders);
     }
 
     const onChange = evt => {
