@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import Home from "./Home";
 import PizzaForm from "./Form";
 import Confirmation from "./Confirmation";
+import { v4 as uuid } from 'uuid'
 import schema from './FormSchema';
 
 const initialFormValues = {
@@ -22,6 +23,8 @@ const initialFormErrors = {
   pizzaSize: '',
 }
 
+
+
 const initialOrders = [];
 const initialDisabled = true;
 
@@ -31,25 +34,41 @@ const App = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
-  const [newOrder,setNewOrder] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [newOrder, setNewOrder] = useState(null);
 
-  const getOrders = () => {
-    axios.get(`https://reqres.in/api/orders`)
-      .then(res=>{
-        setOrders(res.data.data);
-      })
-      .catch(err=>console.error(err));
-  }
-
-  const postNewOrder = newOrder => {
-    axios.post(`https://reqres.in/api/orders`, newOrder)
-      .then(res=>{
-        setOrders([res.data,...orders]);
-        //console.log(orders);
-      })
-      .catch(err=>console.error(err))
-      .finally(()=>setFormValues(initialFormValues))
-  }
+  
+  //adding some debugging code
+  const navigate = useNavigate();
+  const postNewOrder = async newOrder => {
+    
+    console.log("Entering Post New Order POST request...");
+    setIsLoading(true);
+    try {
+      const res = await axios.post('https://reqres.in/api/orders',newOrder);
+      console.log('Received Post Data:',res.data); // debugging line
+      setOrders([...orders, res.data]);
+      setNewOrder(res.data);
+      navigate("/pizza/confirmation");
+    } catch(err){
+      console.error('Axios POST error:',err); // debugging line
+    } finally {
+      setFormValues(initialFormValues);
+      setIsLoading(false);
+    }
+  //   setIsLoading(true);
+  //   try {
+  //   const res = await axios.post(`https://reqres.in/api/orders`, newOrder);
+  //     setOrders([res.data,...orders]);
+  //     navigate("/pizza/confirmation");
+  //     }
+  //     catch(err) {
+  //       console.error(err);
+  //     } finally {
+  //       setFormValues(initialFormValues);
+  //       setIsLoading(false);
+  // }
+};
 
   const validate = (name,value) => {
     yup.reach(schema,name)
@@ -67,20 +86,39 @@ const App = () => {
   }
 
 
-  const formSubmit = () => {
+ const formSubmit = async () => {
     const newOrder = {
       name: formValues.name.trim(),
       pizzaSize: formValues.pizzaSize.trim(),
       toppings: ['pepperoni','sausage','onions','bellPeppers'].filter(topping=>!!formValues[topping]),
       specialInstructions: formValues.specialInstructions.trim()
     }
-    postNewOrder(newOrder);
+    await postNewOrder(newOrder);
     console.log(orders);
   }
 
-  useEffect(()=>{
-    getOrders();
-  },[]);
+  // Adding some debugging to try and figure out why .then() is returning undefined result
+  // useEffect(()=>{
+  //   console.log('Entering "Use Effect" for "GET" call...');
+
+  //   (async () => {
+  //     try {
+  //       const res = await axios.get('https://reqres.in/api/orders');
+  //       console.log('Received Data:',res.data); // debugging line
+  //       setOrders(res.data.data);
+  //     } catch(err){
+  //       console.log("Axios error:", err);
+  //     }
+  //   })();
+  // },[]);
+  //   const promise = axios.get(`https://reqres.in/api/orders`);
+  //   console.log('Is it a promise?', !!promise.then);
+  //     .then(res=>{
+  //       setOrders(res.data.data);
+  //     })
+  //     .catch(err=>console.error(err));
+  //     console.log(orders);
+  // },[]);
 
   useEffect(()=>{
     schema.isValid(formValues).then(valid=>setDisabled(!valid))
@@ -115,8 +153,11 @@ const App = () => {
         <Route 
           path="pizza/confirmation" 
           element=
-            {<Confirmation 
-              orders={orders}
+            { isLoading ?
+            <div>Loading Order Details...</div> :
+            <Confirmation 
+              //getOrders={getOrders}
+              newOrder={newOrder}
             />}
           />
       </Routes>

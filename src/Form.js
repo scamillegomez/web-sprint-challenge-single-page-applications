@@ -8,7 +8,6 @@ export default function PizzaForm(props){
         change,
         disabled,
         errors,
-        orders
     } = props;
 
       
@@ -20,7 +19,7 @@ export default function PizzaForm(props){
         evt.preventDefault();
         submit();
         routeToConfirmation();
-        console.log(orders);
+       // console.log(orders);
     }
 
     const onChange = evt => {
@@ -59,10 +58,10 @@ export default function PizzaForm(props){
                     onChange={onChange}
                 >
                     <option value="">Select a size option</option>
-                    <option value='Personal (6")'>Personal (6")</option>
-                    <option value='Medium (8")'>Medium (8")</option>
-                    <option value='Large (12")'>Large (12")</option>
-                    <option value='Extra Large (16")'>Extra Large (16")</option>
+                    <option value='Personal (6inch)'>Personal (6")</option>
+                    <option value='Medium (8inch)'>Medium (8")</option>
+                    <option value='Large (12inch)'>Large (12")</option>
+                    <option value='Extra Large (16inch)'>Extra Large (16")</option>
                 </select>
             </label>
 
