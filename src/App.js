@@ -97,29 +97,6 @@ const App = () => {
     console.log(orders);
   }
 
-  // Adding some debugging to try and figure out why .then() is returning undefined result
-  // useEffect(()=>{
-  //   console.log('Entering "Use Effect" for "GET" call...');
-
-  //   (async () => {
-  //     try {
-  //       const res = await axios.get('https://reqres.in/api/orders');
-  //       console.log('Received Data:',res.data); // debugging line
-  //       setOrders(res.data.data);
-  //     } catch(err){
-  //       console.log("Axios error:", err);
-  //     }
-  //   })();
-  // },[]);
-  //   const promise = axios.get(`https://reqres.in/api/orders`);
-  //   console.log('Is it a promise?', !!promise.then);
-  //     .then(res=>{
-  //       setOrders(res.data.data);
-  //     })
-  //     .catch(err=>console.error(err));
-  //     console.log(orders);
-  // },[]);
-
   useEffect(()=>{
     schema.isValid(formValues).then(valid=>setDisabled(!valid))
   },[formValues]);
@@ -128,7 +105,7 @@ const App = () => {
   return (
     <>
       <nav id="nav-main">
-        <h3 id="nav-text">Lambda Eats</h3>
+        <h1 id="nav-text">Lambda Eats</h1>
         <div className="nav-links">
           <Link to="/">Home</Link>
           <Link to="/">Help</Link>    
@@ -154,9 +131,10 @@ const App = () => {
           path="pizza/confirmation" 
           element=
             { isLoading ?
-            <div>Loading Order Details...</div> :
+            <div id="order-loading">
+              <h2>Hang tight while we submit your order...</h2>
+            </div> :
             <Confirmation 
-              //getOrders={getOrders}
               newOrder={newOrder}
             />}
           />

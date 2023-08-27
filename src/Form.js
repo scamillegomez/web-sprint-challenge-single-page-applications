@@ -33,7 +33,7 @@ export default function PizzaForm(props){
             id="pizza-form"
             onSubmit={onSubmit}
         >
-            Pizza form
+            <h2>Let us know what you'd like...</h2>
 
             <div className="errors">
                 <div>{errors.name}</div>
@@ -115,7 +115,7 @@ export default function PizzaForm(props){
                 id="order-button"
                 disabled={disabled}
             >
-            Add to Order
+            ADD TO ORDER
             </button>
         </form>
     )

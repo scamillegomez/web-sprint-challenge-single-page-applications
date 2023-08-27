@@ -11,7 +11,7 @@ export default function Home(props){
 return(
     <div className="home-wrapper">
         <h1>Your favorite food delivered, while coding</h1>
-        <button id="order-pizza" onClick={routeToForm}>Pizza?</button>
+        <button id="order-pizza" onClick={routeToForm}>ORDER PIZZA</button>
     </div>
 )
 }
